@@ -1,5 +1,5 @@
 import './App.css';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import axios from "axios";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     }]);
 
     const test = () => {
-        axios.get('http://localhost:5000/test').then(res => {
+        axios.get('/test').then(res => {
             setData(res.data);
         })
     }
