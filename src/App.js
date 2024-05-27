@@ -39,6 +39,7 @@ function App() {
             }
         )
     }
+    const [timeTest, setTimeTest] = useState();
 
     const [newCampingGround, setNewCampingGround] = useState({
         /*
@@ -56,22 +57,24 @@ function App() {
         leaveTime: null*/
         userNo: 2,
         facilitiesInfoNo: 1,
-        mannerStartTime: new Date('22:00:00'),
-        mannerEndTime: new Date('09:00:00'),
-        campGroundImages: "",
-        name:"Happy",
-        location:"house",
+        mannerStartTime: new Date('2020-05-01 22:00:00').toISOString().slice(0,19).replace('T',' '),
+        mannerEndTime: new Date('2020-05-01 09:00:00').toISOString().slice(0,19).replace('T', ' '),
+        campGroundImages: '["a","b","c"]',
+        name: "Happy",
+        location: "house",
         type: "CAMPING",
         callNum: "123",
         campingInfo: "Happy House",
-        enterTime: new Date('12:00:00'),
-        leaveTime: new Date('12:00:00')
+        enterTime: new Date('0001-01-01 22:00:00').toISOString().slice(0,19).replace('T',' '),
+        leaveTime: new Date('0001-01-01 22:00:00').toISOString().slice(0,19).replace('T',' ')
     })
-    const campingGroundRegist = () => {
-        axios.post('/campingGroundRegist', newCampingGround).then(res => {
+
+    function campingGroundRegist(object) {
+        axios.post('/campingGroundRegist', object).then(res => {
             console.log(res.data);
         })
     }
+
     return (
         <div>
             <button onClick={test}>getId</button>
@@ -93,10 +96,12 @@ function App() {
             <input type="text" onChange={(e) => {
                 setNewUser({...newUser, userType: e.target.value})
             }}/>
-            <button onClick={campingGroundRegist}>test</button>
+            <button onClick={()=> campingGroundRegist(newCampingGround)}>test</button>
             <div>
                 {newCampingGround.enterTime.toString()}
             </div>
+            <input type="time" onChange={(e) => setTimeTest(e.target.value)}/>
+            <div>{timeTest}</div>
         </div>
     );
 }
