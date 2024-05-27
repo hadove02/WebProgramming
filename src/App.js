@@ -57,23 +57,54 @@ function App() {
         leaveTime: null*/
         userNo: 2,
         facilitiesInfoNo: 1,
-        mannerStartTime: new Date('2020-05-01 22:00:00').toISOString().slice(0,19).replace('T',' '),
-        mannerEndTime: new Date('2020-05-01 09:00:00').toISOString().slice(0,19).replace('T', ' '),
+        mannerStartTime: new Date('2020-05-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
+        mannerEndTime: new Date('2020-05-01 09:00:00').toISOString().slice(0, 19).replace('T', ' '),
         campGroundImages: '["a","b","c"]',
         name: "Happy",
         location: "house",
         type: "CAMPING",
         callNum: "123",
         campingInfo: "Happy House",
-        enterTime: new Date('0001-01-01 22:00:00').toISOString().slice(0,19).replace('T',' '),
-        leaveTime: new Date('0001-01-01 22:00:00').toISOString().slice(0,19).replace('T',' ')
+        enterTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
+        leaveTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' ')
     })
+
+    const [facilities, setFacilities] = useState({
+        play: 0,
+        surround: 0,
+        facilities: 0
+    })
+
+    const playRegist = () => {
+        axios.post('/facilitiesInfo/play').then(res => {
+            setFacilities({...facilities, play: res.data.playNo});
+        })
+    }
+
+    const surroundRegist = () => {
+        axios.post('/facilitiesInfo/surround').then(res => {
+            setFacilities({...facilities, surround: res.data.surroundNo});
+        })
+    }
+
+    const facilitiesRegist = () => {
+        axios.post('/facilitiesInfo/facilities').then(res => {
+            setFacilities({...facilities, facilities: res.data.facilitiesNo});
+        })
+    }
+
+    const facilitiesInfoRegist = () => {
+        axios.post('/facilitiesInfo',facilities).then(res => {
+
+        })
+    }
 
     function campingGroundRegist(object) {
         axios.post('/campingGroundRegist', object).then(res => {
             console.log(res.data);
         })
     }
+
 
     return (
         <div>
@@ -96,12 +127,15 @@ function App() {
             <input type="text" onChange={(e) => {
                 setNewUser({...newUser, userType: e.target.value})
             }}/>
-            <button onClick={()=> campingGroundRegist(newCampingGround)}>test</button>
-            <div>
-                {newCampingGround.enterTime.toString()}
-            </div>
-            <input type="time" onChange={(e) => setTimeTest(e.target.value)}/>
-            <div>{timeTest}</div>
+            <br/>
+            <button onClick={playRegist}>playRegist</button>
+            <button onClick={surroundRegist}>surroundRegist</button>
+            <button onClick={facilitiesRegist}>facilitiesRegist</button>
+            <br/>
+            <button onClick={facilitiesInfoRegist}>facilitiesInfo</button>
+            <br/>
+            <button onClick={() => campingGroundRegist(newCampingGround)}>test</button>
+
         </div>
     );
 }
