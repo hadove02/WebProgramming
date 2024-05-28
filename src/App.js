@@ -122,19 +122,19 @@ function App() {
         })
     }
 
-    const facilitiesInfoRegist = () => {
-        console.log(facilitiesDetail);
+    const dd = () => {
         axios.post('/facilitiesInfo/facilities', facilitiesDetail.facilities).then(res => {
-            console.log(res.data.facilitiesNo)
+            console.log("facilitiesNo" + res.data.facilitiesNo)
             setFacilitiesDetail({
                 ...facilitiesDetail,
                 facilities: {...facilitiesDetail.facilities, facilitiesNo: res.data.facilitiesNo}
             })
+            console.log(facilitiesDetail.facilities)
             //setFacilities({...facilities, facilities: res.data.facilitiesNo});
         })
-        console.log(facilitiesDetail);
 
         axios.post('/facilitiesInfo/play', facilitiesDetail.play).then(res => {
+            console.log("playNo" + res.data.playNo)
             setFacilitiesDetail({
                 ...facilitiesDetail,
                 play: {...facilitiesDetail.play, playNo: res.data.playNo}
@@ -143,19 +143,23 @@ function App() {
         })
 
         axios.post('/facilitiesInfo/surround', facilitiesDetail.surround).then(res => {
+            const surroundNo = res.data.surroundNo;
+
+            console.log("surroundNo"+surroundNo)
             setFacilitiesDetail({
                 ...facilitiesDetail,
-                surround: {...facilitiesDetail.surround, surroundNo: res.data.surroundNo}
+                surround: {...facilitiesDetail.surround, surroundNo: surroundNo}
             })
             //setFacilities({...facilities, surround: res.data.surroundNo});
         })
 
+    }
 
-        axios.post('/facilitiesInfo', {
-            facilitiesNo: facilitiesDetail.facilities.facilitiesNo,
-            playNo: facilitiesDetail.play.playNo,
-            surroundNo: facilitiesDetail.surround.surroundNo
-        })
+    const facilitiesInfoRegist = () => {
+        console.log("dd");
+        console.log(facilitiesDetail);
+
+
     }
 
     function campingGroundRegist(object) {
@@ -236,13 +240,13 @@ function App() {
             }}></input>강</label>
 
             <br/>
-            <button onClick={facilitiesInfoRegist}>submit</button>
+            <button onClick={dd}>submit</button>
+            <button onClick={facilitiesInfoRegist}>facilitiesInfo</button>
             <br/>
             <button onClick={playRegist}>playRegist</button>
             <button onClick={surroundRegist}>surroundRegist</button>
             <button onClick={facilitiesRegist}>facilitiesRegist</button>
             <br/>
-            <button onClick={facilitiesInfoRegist}>facilitiesInfo</button>
             <br/>
             <button onClick={() => campingGroundRegist(newCampingGround)}>test</button>
         </div>
