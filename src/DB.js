@@ -86,7 +86,7 @@ app.post("/login", (req, res) => {
 })
 
 app.post("/facilitiesInfo", (req, res) => {
-    conn.query('INSERT INTO facilitiesinfo (facilitiesNo, playNo, surroundNo) VALUES (?,?,?)', [req.body.facilities, req.body.play, req.body.surround], (err, result) => {
+    conn.query('INSERT INTO facilitiesinfo (facilitiesNo, playNo, surroundNo) VALUES (?,?,?)', [req.body.facilitiesNo, req.body.playNo, req.body.surroundNo], (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -95,24 +95,9 @@ app.post("/facilitiesInfo", (req, res) => {
     })
 })
 
-app.post("/facilitiesInfo/play", (req, res) => {
-    conn.query('INSERT INTO play VALUES ()', (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-    })
-
-    conn.query('SELECT MAX(playNo) AS playNo FROM play', (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send({playNo: result[0].playNo});
-        }
-    })
-})
 
 app.post("/facilitiesInfo/facilities", (req, res) => {
-    conn.query('INSERT INTO facilities VALUES ()', (err, result) => {
+    conn.query('INSERT INTO facilities (mart, toilet) VALUES (?, ?)', [req.body.mart, req.body.toilet], (err, result) => {
         if (err) {
             console.log(err);
         }
@@ -127,8 +112,24 @@ app.post("/facilitiesInfo/facilities", (req, res) => {
     })
 })
 
+app.post("/facilitiesInfo/play", (req, res) => {
+    conn.query('INSERT INTO play (playGround, singingRoom) VALUES (?,?)', [req.body.playGround, req.body.singingRoom], (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+
+    conn.query('SELECT MAX(playNo) AS playNo FROM play', (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send({playNo: result[0].playNo});
+        }
+    })
+})
+
 app.post("/facilitiesInfo/surround", (req, res) => {
-    conn.query('INSERT INTO surround VALUES ()', (err, result) => {
+    conn.query('INSERT INTO surround (mountain, river) VALUES (?,?)', [req.body.mountain, req.body.river], (err, result) => {
         if (err) {
             console.log(err);
         }

@@ -27,6 +27,7 @@ function App() {
             }
         })
     }
+
     const [newUser, setNewUser] = useState({
         id: "",
         pw: "",
@@ -39,40 +40,68 @@ function App() {
             }
         )
     }
+
     const [timeTest, setTimeTest] = useState();
 
     const [newCampingGround, setNewCampingGround] = useState({
-        /*
-        userNo: 0,
-        facilitiesInfoNo: 0,
-        mannerStartTime: null,
-        mannerEndTime: null,
-        campGroundImages: "",
-        name: "",
-        location: "",
-        type: null,
-        callNum: "",
-        campingInfo: "",
-        enterTime: null,
-        leaveTime: null*/
-        userNo: 2,
-        facilitiesInfoNo: 1,
-        mannerStartTime: new Date('2020-05-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
-        mannerEndTime: new Date('2020-05-01 09:00:00').toISOString().slice(0, 19).replace('T', ' '),
-        campGroundImages: '["a","b","c"]',
-        name: "Happy",
-        location: "house",
-        type: "CAMPING",
-        callNum: "123",
-        campingInfo: "Happy House",
-        enterTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
-        leaveTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' ')
-    })
+            /*
+            userNo: 0,
+            facilitiesInfoNo: 0,
+            mannerStartTime: null,
+            mannerEndTime: null,
+            campGroundImages: "",
+            name: "",
+            location: "",
+            type: null,
+            callNum: "",
+            campingInfo: "",
+            enterTime: null,
+            leaveTime: null
+            */
+            userNo: 2,
+            facilitiesInfoNo: 1,
+            mannerStartTime: new Date('2020-05-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
+            mannerEndTime: new Date('2020-05-01 09:00:00').toISOString().slice(0, 19).replace('T', ' '),
+            campGroundImages: '["a","b","c"]',
+            name: "Happy",
+            location: "house",
+            type: "CAMPING",
+            callNum: "123",
+            campingInfo: "Happy House",
+            enterTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' '),
+            leaveTime: new Date('0001-01-01 22:00:00').toISOString().slice(0, 19).replace('T', ' ')
+        }
+    )
 
     const [facilities, setFacilities] = useState({
-        play: 0,
-        surround: 0,
-        facilities: 0
+            play: 0,
+            surround: 0,
+            facilities: 0
+        }
+    )
+
+    const [facilitiesDetail, setFacilitiesDetail] = useState({
+        facilities: {
+            facilitiesNo: 0,
+            mart:
+                false,
+            toilet:
+                false
+        },
+        play: {
+            playNo: 0,
+            playGround:
+                false,
+            singingRoom:
+                false
+        },
+        surround: {
+            surroundNo: 0,
+            mountain:
+                false,
+            river:
+                false
+        }
     })
 
     const playRegist = () => {
@@ -94,8 +123,38 @@ function App() {
     }
 
     const facilitiesInfoRegist = () => {
-        axios.post('/facilitiesInfo',facilities).then(res => {
+        console.log(facilitiesDetail);
+        axios.post('/facilitiesInfo/facilities', facilitiesDetail.facilities).then(res => {
+            console.log(res.data.facilitiesNo)
+            setFacilitiesDetail({
+                ...facilitiesDetail,
+                facilities: {...facilitiesDetail.facilities, facilitiesNo: res.data.facilitiesNo}
+            })
+            //setFacilities({...facilities, facilities: res.data.facilitiesNo});
+        })
+        console.log(facilitiesDetail);
 
+        axios.post('/facilitiesInfo/play', facilitiesDetail.play).then(res => {
+            setFacilitiesDetail({
+                ...facilitiesDetail,
+                play: {...facilitiesDetail.play, playNo: res.data.playNo}
+            })
+            //setFacilities({...facilities, play: res.data.playNo});
+        })
+
+        axios.post('/facilitiesInfo/surround', facilitiesDetail.surround).then(res => {
+            setFacilitiesDetail({
+                ...facilitiesDetail,
+                surround: {...facilitiesDetail.surround, surroundNo: res.data.surroundNo}
+            })
+            //setFacilities({...facilities, surround: res.data.surroundNo});
+        })
+
+
+        axios.post('/facilitiesInfo', {
+            facilitiesNo: facilitiesDetail.facilities.facilitiesNo,
+            playNo: facilitiesDetail.play.playNo,
+            surroundNo: facilitiesDetail.surround.surroundNo
         })
     }
 
@@ -128,6 +187,57 @@ function App() {
                 setNewUser({...newUser, userType: e.target.value})
             }}/>
             <br/>
+            <hr/>
+            <div style={{fontWeight: "bold"}}>부대시설</div>
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    facilities: {...facilitiesDetail.facilities, mart: e.target.checked}
+                })
+            }}></input>마트</label>
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    facilities: {...facilitiesDetail.facilities, toilet: e.target.checked}
+                })
+            }}></input>화장실</label>
+            <br/>
+            <div style={{fontWeight: "bold"}}>놀거리</div>
+
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    play: {...facilitiesDetail.play, playGround: e.target.checked}
+                })
+            }}></input>운동장</label>
+
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    play: {...facilitiesDetail.play, singingRoom: e.target.checked}
+                })
+            }}></input>노래방</label>
+
+            <br/>
+            <div style={{fontWeight: "bold"}}>주변환경</div>
+
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    surround: {...facilitiesDetail.surround, mountain: e.target.checked}
+                })
+            }}></input>산</label>
+
+            <label><input type="checkbox" onChange={(e) => {
+                setFacilitiesDetail({
+                    ...facilitiesDetail,
+                    surround: {...facilitiesDetail.surround, river: e.target.checked}
+                })
+            }}></input>강</label>
+
+            <br/>
+            <button onClick={facilitiesInfoRegist}>submit</button>
+            <br/>
             <button onClick={playRegist}>playRegist</button>
             <button onClick={surroundRegist}>surroundRegist</button>
             <button onClick={facilitiesRegist}>facilitiesRegist</button>
@@ -135,7 +245,6 @@ function App() {
             <button onClick={facilitiesInfoRegist}>facilitiesInfo</button>
             <br/>
             <button onClick={() => campingGroundRegist(newCampingGround)}>test</button>
-
         </div>
     );
 }
