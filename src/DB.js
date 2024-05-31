@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const {useState} = require("react");
 const port = 5000;
 
 //CORS 오류 해결
@@ -24,33 +25,6 @@ conn.connect((err) => {
     else console.log('Connect');
 })
 
-app.get("/test", (req, res) => {
-    conn.query("SELECT * FROM login", (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
-    })
-})
-app.post("/campingGroundRegist", (req, res) => {
-    console.log(req.body);
-    conn.query(
-        `
-            INSERT INTO campground (userNo, facilitiesInfoNo, mannerStartTime, mannerEndTime, campGroundImages, name,
-                                    location, type, callNum, campingInfo, enterTime, leaveTime)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `,
-        [
-            req.body.userNo, req.body.facilitiesInfoNo, req.body.mannerStartTime, req.body.mannerEndTime, req.body.campGroundImages, req.body.name, req.body.location, req.body.type, req.body.callNum, req.body.campingInfo, req.body.enterTime, req.body.leaveTime
-        ], (err, result) => {
-            if (err) {
-                console.log(err)
-            } else {
-                res.send(true)
-            }
-        })
-})
 app.post("/sign_in", (req, res) => {
     conn.query(`INSERT INTO login (id, pw, userType)
                 VALUES (?, ?, ?)`, [req.body.id, req.body.pw, req.body.userType], (err, result) => {
@@ -62,6 +36,7 @@ app.post("/sign_in", (req, res) => {
 
     })
 })
+
 app.post("/login", (req, res) => {
     conn.query("SELECT * FROM login", (err, result) => {
         if (err) {
@@ -85,65 +60,111 @@ app.post("/login", (req, res) => {
     })
 })
 
-app.post("/facilitiesInfo", (req, res) => {
-    conn.query('INSERT INTO facilitiesinfo (facilitiesNo, playNo, surroundNo) VALUES (?,?,?)', [req.body.facilitiesNo, req.body.playNo, req.body.surroundNo], (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
-    })
+app.post("/facilitiesRegist", async (req, res) => {
+    await insertFacilities(req);
+
+    const facilitiesNo = await maxFacilitiesNo();
+    const playNo = await maxPlayNo();
+    const surroundNo = await maxSurroundNo();
+
+    await insertFacilitiesInfo(facilitiesNo, playNo, surroundNo);
 })
 
-
-app.post("/facilitiesInfo/facilities", (req, res) => {
-    conn.query('INSERT INTO facilities (mart, toilet) VALUES (?, ?)', [req.body.mart, req.body.toilet], (err, result) => {
+async function insertFacilities(req) {
+    conn.query('INSERT INTO facilities (mart, toilet) VALUES (?, ?)', [req.body.facilitiesDetail.facilities.mart, req.body.facilitiesDetail.facilities.toilet], (err) => {
         if (err) {
             console.log(err);
         }
     })
 
-    conn.query('SELECT MAX(facilitiesNo) AS facilitiesNo FROM facilities', (err, result) => {
+    conn.query('INSERT INTO play (playGround,singingRoom) VALUES (?, ?)', [req.body.facilitiesDetail.play.playGround, req.body.facilitiesDetail.play.singingRoom], (err) => {
         if (err) {
             console.log(err);
-        } else {
-            res.send({facilitiesNo: result[0].facilitiesNo});
         }
     })
+
+    conn.query('INSERT INTO surround (mountain, river) VALUES (?, ?)', [req.body.facilitiesDetail.surround.mountain, req.body.facilitiesDetail.surround.river], (err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+}
+
+async function maxFacilitiesNo() {
+    return new Promise((resolve, reject) => {
+        conn.query('SELECT MAX(facilitiesNo) AS facilitiesNo FROM facilities', (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(typeof result[0].facilitiesNo);
+                resolve(parseInt(result[0].facilitiesNo));
+            }
+        })
+    })
+}
+
+async function maxPlayNo() {
+    return new Promise((resolve) => {
+        conn.query('SELECT MAX(playNo) AS playNo FROM play', (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                resolve(parseInt(result[0].playNo));
+            }
+        })
+    })
+}
+
+async function maxSurroundNo() {
+    return new Promise((resolve) => {
+        conn.query('SELECT MAX(surroundNo) AS surroundNo FROM surround', (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                resolve(parseInt(result[0].surroundNo));
+            }
+        })
+    })
+}
+
+async function insertFacilitiesInfo(facilitiesNo, playNo, surroundNo) {
+    conn.query('INSERT INTO facilitiesinfo (facilitiesNo, playNo, surroundNo) values (?,?,?)', [facilitiesNo, playNo, surroundNo], (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+}
+
+app.post("/campingGroundRegist", (req, res) => {
+    console.log(req.body);
+    conn.query(
+        `
+            INSERT INTO campground (userNo, facilitiesInfoNo, mannerStartTime, mannerEndTime, campGroundImages, name,
+                                    location, type, callNum, campingInfo, enterTime, leaveTime)
+            SELECT ?,
+                   MAX(facilitiesInfoNo),
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?,
+                   ?
+            FROM facilitiesinfo;
+        `,
+        [
+            req.body.userNo, req.body.mannerStartTime, req.body.mannerEndTime, req.body.campGroundImages, req.body.name, req.body.location, req.body.type, req.body.callNum, req.body.campingInfo, req.body.enterTime, req.body.leaveTime
+        ], (err, result) => {
+            if (err) {
+                console.log(err)
+            } else {
+                res.send(true)
+            }
+        })
 })
-
-app.post("/facilitiesInfo/play", (req, res) => {
-    conn.query('INSERT INTO play (playGround, singingRoom) VALUES (?,?)', [req.body.playGround, req.body.singingRoom], (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-    })
-
-    conn.query('SELECT MAX(playNo) AS playNo FROM play', (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send({playNo: result[0].playNo});
-        }
-    })
-})
-
-app.post("/facilitiesInfo/surround", (req, res) => {
-    conn.query('INSERT INTO surround (mountain, river) VALUES (?,?)', [req.body.mountain, req.body.river], (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-    })
-
-    conn.query('SELECT MAX(surroundNo) AS surroundNo FROM surround', (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send({surroundNo: result[0].surroundNo});
-        }
-    })
-})
-
 
 app.listen(port, () => {
     console.log("start");

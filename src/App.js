@@ -1,6 +1,10 @@
 import './App.css';
 import {useState} from "react";
 import axios from "axios";
+import Test from "./Test";
+import FacilitiesCheckBox from "./CampGround/FacilitiesCheckBox";
+import RegistFacilities from "./CampGround/RegistFacilities";
+import RegistCampGround from "./CampGround/RegistCampGroundInfo";
 
 function App() {
 
@@ -10,36 +14,6 @@ function App() {
         pw: "",
         userType: null
     }]);
-
-    const [userNo, setUserNo] = useState("");
-    const test = () => {
-        axios.get('/test').then(res => {
-            setData(res.data);
-        })
-    }
-
-    const login = () => {
-        console.log("dd");
-        axios.post('/login', {id: "asdf", pw: "pwd"}).then(res => {
-            {
-                console.log(res.data);
-                res.data.isLogin ? setUserNo(res.data.userNo) : setUserNo(null)
-            }
-        })
-    }
-
-    const [newUser, setNewUser] = useState({
-        id: "",
-        pw: "",
-        userType: null
-    })
-
-    const sign_in = () => {
-        axios.post('/sign_in', newUser).then(res => {
-                console.log(res.data);
-            }
-        )
-    }
 
     const [timeTest, setTimeTest] = useState();
 
@@ -130,7 +104,6 @@ function App() {
                 facilities: {...facilitiesDetail.facilities, facilitiesNo: res.data.facilitiesNo}
             })
             console.log(facilitiesDetail.facilities)
-            //setFacilities({...facilities, facilities: res.data.facilitiesNo});
         })
 
         axios.post('/facilitiesInfo/play', facilitiesDetail.play).then(res => {
@@ -139,20 +112,17 @@ function App() {
                 ...facilitiesDetail,
                 play: {...facilitiesDetail.play, playNo: res.data.playNo}
             })
-            //setFacilities({...facilities, play: res.data.playNo});
         })
 
         axios.post('/facilitiesInfo/surround', facilitiesDetail.surround).then(res => {
             const surroundNo = res.data.surroundNo;
 
-            console.log("surroundNo"+surroundNo)
+            console.log("surroundNo" + surroundNo)
             setFacilitiesDetail({
                 ...facilitiesDetail,
                 surround: {...facilitiesDetail.surround, surroundNo: surroundNo}
             })
-            //setFacilities({...facilities, surround: res.data.surroundNo});
         })
-
     }
 
     const facilitiesInfoRegist = () => {
@@ -168,89 +138,10 @@ function App() {
         })
     }
 
-
-    return (
-        <div>
-            <button onClick={test}>getId</button>
-            <div>
-                userNo : {data[0].userNo}, id : {data[0].id}, pw : {data[0].pw}, userType: {data[0].userType}
-            </div>
-            <button onClick={login}>login</button>
-            <div>
-                userNo : {userNo}
-            </div>
-            <button onClick={sign_in}>sign_in</button>
-            <input type="text" onChange={(e) => {
-                setNewUser({...newUser, id: e.target.value})
-            }}
-            />
-            <input type="text" onChange={(e) => {
-                setNewUser({...newUser, pw: e.target.value})
-            }}/>
-            <input type="text" onChange={(e) => {
-                setNewUser({...newUser, userType: e.target.value})
-            }}/>
-            <br/>
-            <hr/>
-            <div style={{fontWeight: "bold"}}>부대시설</div>
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    facilities: {...facilitiesDetail.facilities, mart: e.target.checked}
-                })
-            }}></input>마트</label>
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    facilities: {...facilitiesDetail.facilities, toilet: e.target.checked}
-                })
-            }}></input>화장실</label>
-            <br/>
-            <div style={{fontWeight: "bold"}}>놀거리</div>
-
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    play: {...facilitiesDetail.play, playGround: e.target.checked}
-                })
-            }}></input>운동장</label>
-
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    play: {...facilitiesDetail.play, singingRoom: e.target.checked}
-                })
-            }}></input>노래방</label>
-
-            <br/>
-            <div style={{fontWeight: "bold"}}>주변환경</div>
-
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    surround: {...facilitiesDetail.surround, mountain: e.target.checked}
-                })
-            }}></input>산</label>
-
-            <label><input type="checkbox" onChange={(e) => {
-                setFacilitiesDetail({
-                    ...facilitiesDetail,
-                    surround: {...facilitiesDetail.surround, river: e.target.checked}
-                })
-            }}></input>강</label>
-
-            <br/>
-            <button onClick={dd}>submit</button>
-            <button onClick={facilitiesInfoRegist}>facilitiesInfo</button>
-            <br/>
-            <button onClick={playRegist}>playRegist</button>
-            <button onClick={surroundRegist}>surroundRegist</button>
-            <button onClick={facilitiesRegist}>facilitiesRegist</button>
-            <br/>
-            <br/>
-            <button onClick={() => campingGroundRegist(newCampingGround)}>test</button>
-        </div>
-    );
+    return <div>
+        <RegistFacilities></RegistFacilities>
+        <RegistCampGround></RegistCampGround>
+    </div>
 }
 
 export default App;
