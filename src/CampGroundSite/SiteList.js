@@ -4,7 +4,7 @@ export default function SiteList({campInfo}){
     function getSiteList(){
         console.log(campInfo)
         axios.post("/getSiteList",campInfo).then((res) => {
-            //res.data 가공 방법
+            //res.data 가공
             console.log(res.data);
         })
     }

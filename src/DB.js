@@ -174,7 +174,7 @@ app.post("/getSiteList", (req, res) => {
             console.log(err);
         } else {
             console.log(result[0])
-            res.send(result[0])
+            res.send(result)
         }
     })
 })
