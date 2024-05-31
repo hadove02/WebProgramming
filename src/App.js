@@ -5,6 +5,7 @@ import Test from "./Test";
 import FacilitiesCheckBox from "./CampGround/FacilitiesCheckBox";
 import RegistFacilities from "./CampGround/RegistFacilities";
 import RegistCampGround from "./CampGround/RegistCampGroundInfo";
+import SiteList from "./CampGroundSite/SiteList";
 
 function App() {
 
@@ -141,6 +142,7 @@ function App() {
     return <div>
         <RegistFacilities></RegistFacilities>
         <RegistCampGround></RegistCampGround>
+        <SiteList campInfo={{campGroundNo:8, userNo:1}}></SiteList>
     </div>
 }
 

@@ -166,6 +166,19 @@ app.post("/campingGroundRegist", (req, res) => {
         })
 })
 
+app.post("/getSiteList", (req, res) => {
+    console.log(req.body.userNo);
+    //받아올 row 설정
+    conn.query("SELECT * FROM campground JOIN campgroundsite ON campground.campgroundNo = campgroundsite.campgroundNo WHERE userNo Like " + req.body.userNo, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result[0])
+            res.send(result[0])
+        }
+    })
+})
+
 app.listen(port, () => {
     console.log("start");
 })
