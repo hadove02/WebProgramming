@@ -1,11 +1,10 @@
 import './App.css';
 import {useState} from "react";
 import axios from "axios";
-import Test from "./Test";
-import FacilitiesCheckBox from "./CampGround/FacilitiesCheckBox";
 import RegistFacilities from "./CampGround/RegistFacilities";
 import RegistCampGround from "./CampGround/RegistCampGroundInfo";
 import SiteList from "./CampGroundSite/SiteList";
+import RegistSite from "./CampGroundSite/RegistSite";
 
 function App() {
 
@@ -143,6 +142,7 @@ function App() {
         <RegistFacilities></RegistFacilities>
         <RegistCampGround></RegistCampGround>
         <SiteList campInfo={{campGroundNo:8, userNo:1}}></SiteList>
+        <RegistSite></RegistSite>
     </div>
 }
 

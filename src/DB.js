@@ -179,6 +179,18 @@ app.post("/getSiteList", (req, res) => {
     })
 })
 
+app.post("/siteRegist", (req, res) => {
+    conn.query("INSERT INTO campgroundsite (siteNo, campGroundNo, campGroundImages, price, peopleNum, siteName) VALUES (?,?,?,?,?,?)",
+        [req.body.siteNo, req.body.campGroundNo, req.body.campGroundImages, req.body.price, req.body.peopleNum, req.body.siteName],
+        (err, result) => {
+            if(err){
+                console.log(err);
+            }else{
+                res.send(true);
+            }
+        })
+})
+
 app.listen(port, () => {
     console.log("start");
 })
