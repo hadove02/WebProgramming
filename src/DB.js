@@ -193,8 +193,8 @@ app.post("/siteRegist", (req, res) => {
 })
 
 app.post("/reservationList", (req, res) => {
-    console.log(req.body);
-    conn.query('select reservationNo, enterDay, leaveDay, reservation.peopleNum, state from campground join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo join reservation on campgroundsite.campgroundsiteno = reservation.campGroundSiteNo where LIKE ' + <res className="body userNo"></res>, (err, result) => {
+    console.log(req.body.userNo);
+    conn.query('select reservationNo, enterDay, leaveDay, reservation.peopleNum, state from campground join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo join reservation on campgroundsite.campgroundsiteno = reservation.campGroundSiteNo where LIKE ' + res.body.userNo, (err, result) => {
         res.send(result);
         console.log(result);
     })

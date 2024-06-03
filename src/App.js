@@ -140,11 +140,12 @@ function App() {
     }
 
     return <div>
-        <RegistFacilities></RegistFacilities>
         <RegistCampGround></RegistCampGround>
-        <SiteList campInfo={{campGroundNo:8, userNo:1}}></SiteList>
+        <RegistFacilities></RegistFacilities>
+        <SiteList campInfo={{campGroundNo: 8, userNo: 1}}></SiteList>
         <RegistSite></RegistSite>
-        <ReservationList userNo={{userNo:1}}></ReservationList>
+        <ReservationList userNo={1}></ReservationList>
+
     </div>
 }
 
