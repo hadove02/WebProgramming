@@ -5,6 +5,7 @@ import RegistFacilities from "./CampGround/RegistFacilities";
 import RegistCampGround from "./CampGround/RegistCampGroundInfo";
 import SiteList from "./CampGroundSite/SiteList";
 import RegistSite from "./CampGroundSite/RegistSite";
+import ReservationList from "./CampGroundSite/ReservationList";
 
 function App() {
 
@@ -143,6 +144,7 @@ function App() {
         <RegistCampGround></RegistCampGround>
         <SiteList campInfo={{campGroundNo:8, userNo:1}}></SiteList>
         <RegistSite></RegistSite>
+        <ReservationList userNo={{userNo:1}}></ReservationList>
     </div>
 }
 

@@ -135,6 +135,7 @@ async function insertFacilitiesInfo(facilitiesNo, playNo, surroundNo) {
     })
 }
 
+
 app.post("/campingGroundRegist", (req, res) => {
     console.log(req.body);
     conn.query(
@@ -183,13 +184,22 @@ app.post("/siteRegist", (req, res) => {
     conn.query("INSERT INTO campgroundsite (siteNo, campGroundNo, campGroundImages, price, peopleNum, siteName) VALUES (?,?,?,?,?,?)",
         [req.body.siteNo, req.body.campGroundNo, req.body.campGroundImages, req.body.price, req.body.peopleNum, req.body.siteName],
         (err, result) => {
-            if(err){
+            if (err) {
                 console.log(err);
-            }else{
+            } else {
                 res.send(true);
             }
         })
 })
+
+app.post("/reservationList", (req, res) => {
+    console.log(req.body);
+    conn.query('select reservationNo, enterDay, leaveDay, reservation.peopleNum, state from campground join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo join reservation on campgroundsite.campgroundsiteno = reservation.campGroundSiteNo where LIKE ' + <res className="body userNo"></res>, (err, result) => {
+        res.send(result);
+        console.log(result);
+    })
+})
+
 
 app.listen(port, () => {
     console.log("start");
