@@ -200,7 +200,45 @@ app.post("/reservationList", (req, res) => {
     })
 })
 
+app.post("/campGroundList", (req, res) => {
+    console.log(req.body.campGroundNo);
+    conn.query('select * from campground join facilitiesinfo on campground.facilitiesinfoNo = facilitiesInfo.facilitiesInfoNo left join review on campground.campGroundNo = review.campGroundNo join play on facilitiesinfo.playNo = play.playNo join surround on facilitiesinfo.surroundNo = surround.surroundNo  join facilities on facilitiesinfo.facilitiesNo = facilities.facilitiesNo where campground.campGroundNo like ' + req.body.campGroundNo, (err, result) => {
+        console.log(result);
+        res.send(result);
+    })
+})
 
+app.post("/reservationSite", (req, res) => {
+    const {campGroundSiteNo, enterDay, leaveDay, guestNo, peopleNum} = req.body.reservationSite;
+    const query =
+        'insert reservation (campGroundSiteNo, enterDay, leaveDay, guestNo, peopleNum, state)' +
+        ' values (?, ?, ?, ?, ?, \'WAIT\')';
+    conn.query(query, [campGroundSiteNo, enterDay, leaveDay, guestNo, peopleNum], (err, result) => {
+        res.send(true);
+    })
+})
+
+app.post("/mySiteList", (req, res) => {
+    const query =
+        'select name, siteName, state, campground.campGroundNo ' +
+        'from campground ' +
+        'join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo ' +
+        'join reservation on campgroundsite.campGroundSiteNo = reservation.campGroundSiteNo ' +
+        'where guestNo like ' + req.body.userNo;
+    conn.query(query, (err, result) => {
+        res.send(result);
+    })
+})
+
+app.post("/postReview", (req, res) => {
+    const {campGroundNo, reviewImage, review} = req.body.postReview;
+
+    const query = 'insert review (campGroundNo, reviewImage, review)' +
+        'values (?, ?, ?)'
+    conn.query(query,[campGroundNo, reviewImage,review],((err,result)=>{
+        res.send(true);
+    }))
+})
 app.listen(port, () => {
     console.log("start");
 })

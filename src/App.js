@@ -6,6 +6,10 @@ import RegistCampGround from "./CampGround/RegistCampGroundInfo";
 import SiteList from "./CampGroundSite/SiteList";
 import RegistSite from "./CampGroundSite/RegistSite";
 import ReservationList from "./CampGroundSite/ReservationList";
+import CampGroundList from "./CampGround/CampGroundList";
+import ReservationSite from "./CampGroundSite/ReservationSite";
+import MySiteList from "./MyMenu/MySiteList";
+import PostReview from "./MyMenu/PostReview";
 
 function App() {
 
@@ -139,13 +143,30 @@ function App() {
         })
     }
 
+    const rSite = {
+        campGroundSiteNo: 2,
+        enterDay: null,
+        leaveDay: null,
+        guestNo: 1,
+        peopleNum: 3
+    }
+
+    const review = {
+        campGroundNo: 1,
+        reviewImage: null,
+        review: "좋아요~"
+    }
+
     return <div>
         <RegistCampGround></RegistCampGround>
         <RegistFacilities></RegistFacilities>
         <SiteList campInfo={{campGroundNo: 8, userNo: 1}}></SiteList>
         <RegistSite></RegistSite>
         <ReservationList userNo={1}></ReservationList>
-
+        <CampGroundList campGroundNo={1}></CampGroundList>
+        <ReservationSite reservationSite={rSite}></ReservationSite>
+        <MySiteList userNo={1}></MySiteList>
+        <PostReview postReview={review}></PostReview>
     </div>
 }
 
