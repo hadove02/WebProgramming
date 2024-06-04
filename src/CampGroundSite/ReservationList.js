@@ -15,8 +15,7 @@ export default function ReservationList(userNo) {
         <button onClick={() => reservationList(userNo)}>test</button>
         {reservationLists.map((reservation) => (
             console.log(reservationLists),
-            <div>{reservation.reservationNo}</div>
+                <div>{reservation.reservationNo}</div>
         ))}
     </div>
-
 }

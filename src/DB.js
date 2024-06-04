@@ -194,9 +194,9 @@ app.post("/siteRegist", (req, res) => {
 
 app.post("/reservationList", (req, res) => {
     console.log(req.body.userNo);
-    conn.query('select reservationNo, enterDay, leaveDay, reservation.peopleNum, state from campground join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo join reservation on campgroundsite.campgroundsiteno = reservation.campGroundSiteNo where LIKE ' + res.body.userNo, (err, result) => {
-        res.send(result);
+    conn.query('select reservationNo, enterDay, leaveDay, reservation.peopleNum, state from campground join campgroundsite on campground.campgroundNo = campgroundsite.campgroundNo join reservation on campgroundsite.campgroundsiteno = reservation.campGroundSiteNo where userNo LIKE ' + req.body.userNo, (err, result) => {
         console.log(result);
+        res.send(result);
     })
 })
 
@@ -243,5 +243,13 @@ app.listen(port, () => {
     console.log("start");
 })
 
+app.post("/changeReservationState", (req, res) => {
+    conn.query('UPDATE reservation SET state=\'IMPOSS\' WHERE reservationNo LIKE '+req.body.reservationNo,(err, result) => {
+        if (err) {
+            console.log(err);
+        }else{}
+        res.send(true);
+    })
+})
 
 module.exports = conn;

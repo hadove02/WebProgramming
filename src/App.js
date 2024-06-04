@@ -10,6 +10,7 @@ import CampGroundList from "./CampGround/CampGroundList";
 import ReservationSite from "./CampGroundSite/ReservationSite";
 import MySiteList from "./MyMenu/MySiteList";
 import PostReview from "./MyMenu/PostReview";
+import ChangeReservationState from "./CampGroundSite/ChangeReservationState";
 
 function App() {
 
@@ -167,6 +168,7 @@ function App() {
         <ReservationSite reservationSite={rSite}></ReservationSite>
         <MySiteList userNo={1}></MySiteList>
         <PostReview postReview={review}></PostReview>
+        <ChangeReservationState reservationNo={2}></ChangeReservationState>
     </div>
 }
 
